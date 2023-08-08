@@ -1,7 +1,7 @@
 const mongoose = require('mongoose'); // Import mongoose
 
 // Connect to the MongoDB database using the provided URI or a local URI
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/googlebooks', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/googlebooks', {
   useNewUrlParser: true, // Use the new URL parser
   useUnifiedTopology: true, // Use the new unified topology
   useCreateIndex: true, // Use the createIndex() function instead of deprecated ensureIndex()
