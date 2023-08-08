@@ -1,24 +1,24 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import SearchBooks from './pages/SearchBooks';
-import SavedBooks from './pages/SavedBooks';
-import Navbar from './components/Navbar';
+import React from 'react'; // Import React
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Import components from 'react-router-dom'
+import SearchBooks from './pages/SearchBooks'; // Import the SearchBooks component
+import SavedBooks from './pages/SavedBooks'; // Import the SavedBooks component
+import Navbar from './components/Navbar'; // Import the Navbar component
 
 function App() {
   return (
     <Router>
       <>
-        <Navbar />
+        <Navbar /> 
         <Routes>
-          <Route 
-            path='/' 
+          <Route
+            path='/'
             element={<SearchBooks />} 
           />
-          <Route 
-            path='/saved' 
+          <Route
+            path='/saved'
             element={<SavedBooks />} 
           />
-          <Route 
+          <Route
             path='*'
             element={<h1 className='display-2'>Wrong page!</h1>}
           />
@@ -29,3 +29,4 @@ function App() {
 }
 
 export default App;
+

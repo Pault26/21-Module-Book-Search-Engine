@@ -7,14 +7,14 @@ import {
   Col
 } from 'react-bootstrap';
 
-import { getMe, deleteBook } from '../utils/API';
-import Auth from '../utils/auth';
-import { removeBookId } from '../utils/localStorage';
+import { getMe, deleteBook } from '../utils/API'; // Import API functions
+import Auth from '../utils/auth'; // Import Auth utility
+import { removeBookId } from '../utils/localStorage'; // Import local storage function
 
 const SavedBooks = () => {
   const [userData, setUserData] = useState({});
 
-  // use this to determine if `useEffect()` hook needs to run again
+  // Use this to determine if `useEffect()` needs to run again
   const userDataLength = Object.keys(userData).length;
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const SavedBooks = () => {
         const response = await getMe(token);
 
         if (!response.ok) {
-          throw new Error('something went wrong!');
+          throw new Error('Something went wrong!');
         }
 
         const user = await response.json();
@@ -42,7 +42,7 @@ const SavedBooks = () => {
     getUserData();
   }, [userDataLength]);
 
-  // create function that accepts the book's mongo _id value as param and deletes the book from the database
+  // Create function that accepts the book's MongoDB _id value as a parameter and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -54,19 +54,19 @@ const SavedBooks = () => {
       const response = await deleteBook(bookId, token);
 
       if (!response.ok) {
-        throw new Error('something went wrong!');
+        throw new Error('Something went wrong!');
       }
 
       const updatedUser = await response.json();
       setUserData(updatedUser);
-      // upon success, remove book's id from localStorage
+      // Upon success, remove the book's ID from localStorage
       removeBookId(bookId);
     } catch (err) {
       console.error(err);
     }
   };
 
-  // if data isn't here yet, say so
+  // If data isn't here yet, show a loading message
   if (!userDataLength) {
     return <h2>LOADING...</h2>;
   }

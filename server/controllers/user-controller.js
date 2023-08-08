@@ -1,10 +1,10 @@
-// import user model
+// Import the User model
 const { User } = require('../models');
-// import sign token function from auth
+// Import the signToken function from auth
 const { signToken } = require('../utils/auth');
 
 module.exports = {
-  // get a single user by either their id or their username
+  // Retrieve a single user by their id or username
   async getSingleUser({ user = null, params }, res) {
     const foundUser = await User.findOne({
       $or: [{ _id: user ? user._id : params.id }, { username: params.username }],
@@ -16,18 +16,19 @@ module.exports = {
 
     res.json(foundUser);
   },
-  // create a user, sign a token, and send it back (to client/src/components/SignUpForm.js)
+
+  // Create a user, sign a token, and send it back
   async createUser({ body }, res) {
     const user = await User.create(body);
 
     if (!user) {
-      return res.status(400).json({ message: 'Something is wrong!' });
+      return res.status(400).json({ message: 'Something went wrong!' });
     }
     const token = signToken(user);
     res.json({ token, user });
   },
-  // login a user, sign a token, and send it back (to client/src/components/LoginForm.js)
-  // {body} is destructured req.body
+
+  // Log in a user, sign a token, and send it back
   async login({ body }, res) {
     const user = await User.findOne({ $or: [{ username: body.username }, { email: body.email }] });
     if (!user) {
@@ -42,8 +43,8 @@ module.exports = {
     const token = signToken(user);
     res.json({ token, user });
   },
-  // save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)
-  // user comes from `req.user` created in the auth middleware function
+
+  // Save a book to a user's `savedBooks` field
   async saveBook({ user, body }, res) {
     console.log(user);
     try {
@@ -58,7 +59,8 @@ module.exports = {
       return res.status(400).json(err);
     }
   },
-  // remove a book from `savedBooks`
+
+  // Remove a book from a user's `savedBooks` array
   async deleteBook({ user, params }, res) {
     const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },

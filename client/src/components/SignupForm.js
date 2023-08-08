@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
-import { createUser } from '../utils/API';
-import Auth from '../utils/auth';
+import { createUser } from '../utils/API'; // Import API function
+import Auth from '../utils/auth'; // Import Auth utility
 
 const SignupForm = () => {
-  // set initial form state
+  // Set initial form state
   const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
-  // set state for form validation
+  // Set state for form validation
   const [validated] = useState(false);
-  // set state for alert
+  // Set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
   const handleInputChange = (event) => {
@@ -20,7 +20,7 @@ const SignupForm = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    // check if form has everything (as per react-bootstrap docs)
+    // Check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -31,12 +31,12 @@ const SignupForm = () => {
       const response = await createUser(userFormData);
 
       if (!response.ok) {
-        throw new Error('something went wrong!');
+        throw new Error('Something went wrong!');
       }
 
       const { token, user } = await response.json();
       console.log(user);
-      Auth.login(token);
+      Auth.login(token); // Log in the user by setting the token in local storage
     } catch (err) {
       console.error(err);
       setShowAlert(true);
@@ -53,7 +53,7 @@ const SignupForm = () => {
     <>
       {/* This is needed for the validation functionality above */}
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
-        {/* show alert if server response is bad */}
+        {/* Show alert if server response is bad */}
         <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
           Something went wrong with your signup!
         </Alert>

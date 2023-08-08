@@ -1,49 +1,49 @@
-// use this to decode a token and get the user's information out of it
-import decode from 'jwt-decode';
+import decode from 'jwt-decode'; // Import the jwt-decode library for token decoding
 
-// create a new class to instantiate for a user
 class AuthService {
-  // get user data
+  // Get user data from the decoded token
   getProfile() {
     return decode(this.getToken());
   }
 
-  // check if user's logged in
+  // Check if the user is logged in
   loggedIn() {
-    // Checks if there is a saved token and it's still valid
-    const token = this.getToken();
-    return !!token && !this.isTokenExpired(token); // handwaiving here
+    const token = this.getToken(); // Get the user's token
+    return !!token && !this.isTokenExpired(token); // Check token validity
   }
 
-  // check if token is expired
+  // Check if a token is expired
   isTokenExpired(token) {
     try {
       const decoded = decode(token);
       if (decoded.exp < Date.now() / 1000) {
-        return true;
-      } else return false;
+        return true; // Token is expired
+      } else {
+        return false; // Token is not expired
+      }
     } catch (err) {
-      return false;
+      return false; // An error occurred (invalid token)
     }
   }
 
+  // Get the user's token from localStorage
   getToken() {
-    // Retrieves the user token from localStorage
     return localStorage.getItem('id_token');
   }
 
+  // Log in a user by saving their token to localStorage and redirecting
   login(idToken) {
-    // Saves user token to localStorage
-    localStorage.setItem('id_token', idToken);
-    window.location.assign('/');
+    localStorage.setItem('id_token', idToken); // Save user token to localStorage
+    window.location.assign('/'); // Redirect to the root path
   }
 
+  // Log out a user by clearing token and profile data from localStorage
   logout() {
-    // Clear user token and profile data from localStorage
-    localStorage.removeItem('id_token');
-    // this will reload the page and reset the state of the application
+    localStorage.removeItem('id_token'); // Clear user token from localStorage
+    // Reload the page to reset the application state
     window.location.assign('/');
   }
 }
 
-export default new AuthService();
+export default new AuthService(); // Export an instance of the AuthService class
+
