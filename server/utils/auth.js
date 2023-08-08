@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken'); // Import the JWT library
+const { AuthenticationError } = require('apollo-server-express');
 
 // Set token secret and expiration date
 const secret = 'mysecretsshhhhh'; // Secret key for token signing and verification
@@ -16,16 +17,16 @@ module.exports = {
     }
 
     if (!token) {
-      return res.status(400).json({ message: 'You have no token!' }); // No token provided
+      throw new AuthenticationError('You have no token!'); // No token provided
     }
 
     // Verify token and extract user data
     try {
       const { data } = jwt.verify(token, secret, { maxAge: expiration }); // Verify token using the secret
       req.user = data; // Attach user data to the request object
-    } catch {
-      console.log('Invalid token');
-      return res.status(400).json({ message: 'Invalid token!' }); // Token verification failed
+    } catch (error) {
+      console.log('Invalid token:', error.message);
+      throw new AuthenticationError('Invalid token!'); // token verification failed
     }
 
     // Proceed to the next middleware or endpoint
